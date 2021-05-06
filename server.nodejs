@@ -1,0 +1,60 @@
+var net = require('net');
+var ws = require('nodejs-websocket');
+var x = null;
+var xx = null;
+// tcp服务器
+var server1 = net.createServer(function (connection) {
+	//connect to ros
+	x = connection;
+	console.log('client connected');
+	connection.on('data', function (data) {
+		console.log(data.toString());
+		if (xx == null) {// 转发数据
+			console.log('connect with web not started');
+		} else {
+			xx.sendText(data.toString());
+		}
+	});
+	connection.on('close', function() { 
+		x=null;
+		console.log('断开与服务器的连接');
+	 });
+	 connection.on('error', function() { 
+		x=null;
+		console.log('断开与服务器的连接');
+	 });
+});
+server1.listen(
+	{
+		port: 8003,
+		exclusive: false,
+	},
+	function () {
+		console.log('ros server is listening 8003');
+	}
+);
+var PORT = 8004;
+var wsserver = ws// ws服务器
+	.createServer(function (conn) {
+		//connect to web
+		console.log('ws connected');
+		xx = conn;
+		conn.on('text', function (str) {// 转发数据
+			console.log(str.toString())
+			if (x == null) {
+				console.log('connect with ros not started');
+			} else {
+				x.write(str.toString());
+			}
+		});
+		conn.on("close", function (code, reason) {
+			xx = null;
+			console.log("ws关闭连接")
+		});
+		conn.on("error", function (code, reason) {
+			xx = null;
+			console.log("ws异常关闭")
+		});
+	})
+	.listen(PORT);
+console.log('websocket server listening on port:' + PORT);

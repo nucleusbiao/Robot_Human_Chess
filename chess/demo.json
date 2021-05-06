@@ -1,0 +1,17 @@
+
+[
+{
+    "purpose":"update_map", 
+    "pick_up":{
+        "x":0,
+        "y":9
+        }, 
+    "put_down":{
+        "x":0,
+        "y":8
+        }
+},
+{
+    "purpose":"newGame"
+}
+]
