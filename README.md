@@ -25,3 +25,6 @@ human vs robot on Chinese chess
 	
 常见问题：
 	运行一出现端口占用，同时修改一，三中对应端口号即可
+
+ Demo Video<br/>
+![](chess.gif)
